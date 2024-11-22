@@ -21,10 +21,12 @@ public class WaitingRoomController {
     Mono<Rendering> waitingRoomPage(@RequestParam(name = "queue", defaultValue = "default") String queue,
                                     @RequestParam(name = "user_id") Long userId,
                                     ServerWebExchange exchange) {
+        var redirectUrl = "/waiting-main-room?queue=%s&user_id=%s".formatted(queue, userId);
+        var token = getToken(queue, exchange);
 
-        return userQueueService.isAllowed(queue, userId)
+        return userQueueService.isAllowedByToken(queue, userId, token)
                 .filter(allowed -> allowed)
-                .flatMap(allowed -> Mono.just(Rendering.redirectTo("/waiting-main-room").build()))
+                .flatMap(allowed -> Mono.just(Rendering.redirectTo(redirectUrl).build()))
                 .switchIfEmpty(
                         userQueueService.registerWaitQueue(queue, userId)
                                 .onErrorResume(ex -> userQueueService.getRank(queue, userId))
@@ -38,8 +40,32 @@ public class WaitingRoomController {
     }
 
     @GetMapping("/waiting-main-room")
-    Mono<Rendering> waitingMainRoomPage() {
-        return Mono.just(Rendering.view("waiting-main-room.html").build());
+    Mono<Rendering> waitingMainRoomPage(@RequestParam(name = "queue", defaultValue = "default") String queue,
+                                        @RequestParam(name = "user_id") Long userId,
+                                        ServerWebExchange exchange
+    ) {
+        var token = getToken(queue, exchange);
+
+        Rendering waitingRoomRendering = Rendering.view("waiting-room.html")
+                .modelAttribute("userId", userId)
+                .modelAttribute("queue", queue)
+                .build();
+
+        if (exchange.getRequest().getBody() == null) {
+            // 대기 웹페이지로 리다이렉트
+            return Mono.just(waitingRoomRendering);
+        }
+
+        return userQueueService.isAllowedByToken(queue, userId, token).filter(allowed -> allowed)
+                .flatMap(allowed -> Mono.just(Rendering.view("waiting-main-room.html").build()))
+                .switchIfEmpty(Mono.just(waitingRoomRendering));
+    }
+
+    private String getToken(String queue, ServerWebExchange exchange) {
+        var key = "user-queue-%s-token".formatted(queue);
+        var cookieValue = exchange.getRequest().getCookies().getFirst(key);
+        var token = (cookieValue == null) ? "" : cookieValue.getValue();
+        return token;
     }
 
 }
