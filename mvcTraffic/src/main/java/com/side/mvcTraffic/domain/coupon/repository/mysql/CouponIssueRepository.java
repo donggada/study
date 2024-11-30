@@ -1,17 +1,19 @@
-package com.example.couponcore.repository.mysql;
+package com.side.mvcTraffic.domain.coupon.repository.mysql;
 
-import com.example.couponcore.model.CouponIssue;
-import com.querydsl.jpa.JPQLQueryFactory;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.side.mvcTraffic.domain.coupon.entity.CouponIssue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.example.couponcore.model.QCouponIssue.couponIssue;
+import static com.side.mvcTraffic.domain.coupon.entity.QCouponIssue.couponIssue;
+
 
 @RequiredArgsConstructor
 @Repository
 public class CouponIssueRepository {
 
-    private final JPQLQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public CouponIssue findFirstCouponIssue(long couponId, long userId) {
         return queryFactory.selectFrom(couponIssue)

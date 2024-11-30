@@ -69,12 +69,10 @@ public class Coupon extends BaseTimeEntity {
 
     public void issue() {
         if (!availableIssueQuantity()) {
-            throw INVALID_COUPON_ISSUE_QUANTITY.couponIssueBuild();
-//            throw new CouponIssueException(INVALID_COUPON_ISSUE_QUANTITY, "발급 가능한 수량을 초과합니다. total : %s, issued: %s".formatted(totalQuantity, issuedQuantity));
+            throw INVALID_COUPON_ISSUE_QUANTITY.build("발급 가능한 수량을 초과합니다. total : %s, issued: %s".formatted(totalQuantity, issuedQuantity));
         }
         if (!availableIssueDate()) {
-            throw INVALID_COUPON_ISSUE_DATE.couponIssueBuild();
-//            throw new CouponIssueException(INVALID_COUPON_ISSUE_DATE, "발급 가능한 일자가 아닙니다. request : %s, issueStart: %s, issueEnd: %s".formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
+            throw INVALID_COUPON_ISSUE_DATE.build("발급 가능한 일자가 아닙니다. request : %s, issueStart: %s, issueEnd: %s".formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
         }
         issuedQuantity++;
     }
