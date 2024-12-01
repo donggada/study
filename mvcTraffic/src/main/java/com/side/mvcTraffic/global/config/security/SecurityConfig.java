@@ -29,6 +29,8 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll() // 인증 필요 없는 경로
                         .requestMatchers("/api/v1/user/login","/api/v1/user/register").permitAll()
                         .requestMatchers("/api/v1/queue/**", "/waiting-room", "/waiting-main-room").permitAll() // 나머지 요청은 인증 필요
+                        .requestMatchers("hello").permitAll() // 부하 테스트 locust 테스트
+                        .requestMatchers("/api/v1/coupon/**").permitAll() // 쿠폰 locust 테스트
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->

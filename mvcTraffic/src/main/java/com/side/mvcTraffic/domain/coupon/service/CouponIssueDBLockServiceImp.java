@@ -14,7 +14,7 @@ import static com.side.mvcTraffic.global.exception.ErrorCode.DUPLICATED_COUPON_I
 
 @Service
 @RequiredArgsConstructor
-public class CouponIssueServiceImp implements CouponIssueService {
+public class CouponIssueDBLockServiceImp implements CouponIssueService {
 
     private final CouponJpaRepository couponJpaRepository;
     private final CouponIssueJpaRepository couponIssueJpaRepository;
@@ -26,19 +26,10 @@ public class CouponIssueServiceImp implements CouponIssueService {
     public void issue(long couponId, long userId) {
         //  DB 락 사용해서 동시성 제어 DB CPU 증가
         Coupon coupon = findCouponWithLock(couponId);
-
-//        Coupon coupon = findCoupon(couponId);
         coupon.issue();
         saveCouponIssue(couponId, userId);
     }
 
-
-    @Transactional(readOnly = true)
-    public Coupon findCoupon(long couponId) {
-        return couponJpaRepository.findById(couponId).orElseThrow(() -> {
-            throw COUPON_NOT_EXIST.build(couponId);
-        });
-    }
 
     @Transactional
     public Coupon findCouponWithLock(long couponId) {

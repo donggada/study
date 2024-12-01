@@ -1,4 +1,4 @@
-package com.example.couponapi.controller.dto;
+package com.side.mvcTraffic.domain.coupon.dto.request;
 
-public record CouponIssueRequestDto(long userId, long couponId) {
+public record CouponIssueRequest(long userId, long couponId) {
 }

@@ -42,6 +42,9 @@ dependencies {
 	annotationProcessor ("jakarta.annotation:jakarta.annotation-api")
 	annotationProcessor ("jakarta.persistence:jakarta.persistence-api")
 
+	//redisson 분산락
+	implementation("org.redisson:redisson-spring-boot-starter:3.16.4")
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	runtimeOnly("com.h2database:h2")
