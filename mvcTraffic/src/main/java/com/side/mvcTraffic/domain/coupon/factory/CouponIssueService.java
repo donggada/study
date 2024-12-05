@@ -1,4 +1,4 @@
-package com.side.mvcTraffic.domain.coupon.service;
+package com.side.mvcTraffic.domain.coupon.factory;
 
 public interface CouponIssueService {
 
