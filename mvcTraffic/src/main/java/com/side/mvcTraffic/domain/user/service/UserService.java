@@ -23,7 +23,7 @@ import static com.side.mvcTraffic.global.exception.ErrorCode.*;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder = null;
+    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
     public RegisterResponse register(UserRegisterRequest userRegisterRequest) {
