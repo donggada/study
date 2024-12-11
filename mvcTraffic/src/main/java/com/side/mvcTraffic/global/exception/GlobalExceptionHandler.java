@@ -17,23 +17,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ ApplicationException.class })
     protected ResponseEntity handleApiException(ApplicationException ex) {
-        return ResponseEntity.status(ex.getHttpStatus()).body(new ServerExceptionResponse(ex.getCode(), ex.getReason()));
+        log.error("error message = {} , reason = {}", ex.getMessage(), ex.getReason(), ex);
+        return ResponseEntity.status(ex.getHttpStatus()).body(new ServerExceptionResponse(ex.getCode(), ex.getMessage(), ex.getReason()));
     }
 
     @ExceptionHandler({ UsernameNotFoundException.class })
     protected ResponseEntity UsernameNotFoundException(UsernameNotFoundException ex) {
-        return ResponseEntity.status(UNAUTHORIZED).body(new ServerExceptionResponse(UNAUTHORIZED_ACCESS.getCode(), "UsernameNotFoundException -> " + ex.getMessage()));
+        return ResponseEntity.status(UNAUTHORIZED).body(new ServerExceptionResponse(UNAUTHORIZED_ACCESS.getCode(), "인증 에러 입니다.","UsernameNotFoundException -> " + ex.getMessage()));
     }
 
     @ExceptionHandler({ Exception.class })
     protected ResponseEntity exception(Exception ex) {
-        log.error("Error message = {}", ex.getMessage(), ex);
+        log.error("error message = {}", ex.getMessage(), ex);
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
-                .body(new ServerExceptionResponse(INTERNAL_SERVER_ERROR.toString(), ex.getMessage()));
+                .body(new ServerExceptionResponse(INTERNAL_SERVER_ERROR.toString(), "서버 에러입니다.", ex.getMessage()));
     }
 
-    public record ServerExceptionResponse(String code, String reason) {
+    public record ServerExceptionResponse(String code, String message, String reason) {
     }
 
 }
