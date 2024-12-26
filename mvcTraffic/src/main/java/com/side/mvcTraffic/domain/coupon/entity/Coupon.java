@@ -1,7 +1,6 @@
 package com.side.mvcTraffic.domain.coupon.entity;
 
 
-import com.side.mvcTraffic.global.exception.CouponIssueException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +13,7 @@ import static com.side.mvcTraffic.global.exception.ErrorCode.INVALID_COUPON_ISSU
 import static com.side.mvcTraffic.global.exception.ErrorCode.INVALID_COUPON_ISSUE_QUANTITY;
 
 
-@Builder
+//@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -50,6 +49,7 @@ public class Coupon extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime dateIssueEnd;
 
+    // 동시성 문제
     public boolean availableIssueQuantity() {
         if (totalQuantity == null) {
             return true;
@@ -62,10 +62,13 @@ public class Coupon extends BaseTimeEntity {
         return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now);
     }
 
-    public boolean isIssueComplete() {
+    public void availableDate() {
         LocalDateTime now = LocalDateTime.now();
-        return dateIssueEnd.isBefore(now) || !availableIssueQuantity();
+        if(!dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now)) {
+            throw INVALID_COUPON_ISSUE_DATE.build("발급 가능한 일자가 아닙니다. request : %s, issueStart: %s, issueEnd: %s".formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
+        }
     }
+
 
     public void issue() {
         if (!availableIssueQuantity()) {

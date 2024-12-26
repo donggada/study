@@ -82,7 +82,7 @@ public class UserQueueService {
         }
     }
 
-    @Scheduled(initialDelay = 5000, fixedDelay = 10000)
+//    @Scheduled(initialDelay = 5000, fixedDelay = 10000)
     public void scheduleAllowUser() {
         if (!scheduling) {
             log.info("passed scheduling...");

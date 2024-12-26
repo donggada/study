@@ -20,7 +20,7 @@ public class CustomAuthenticationException implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ResponseEntity<?> responseEntity = new ResponseEntity<>(new GlobalExceptionHandler.ServerExceptionResponse(UNAUTHORIZED_ACCESS.getCode(), UNAUTHORIZED_ACCESS.getReason()), HttpStatus.UNAUTHORIZED);
+        ResponseEntity<?> responseEntity = new ResponseEntity<>(new GlobalExceptionHandler.ServerExceptionResponse(UNAUTHORIZED_ACCESS.getCode(), UNAUTHORIZED_ACCESS.getMessage(), UNAUTHORIZED_ACCESS.getReason()), HttpStatus.UNAUTHORIZED);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

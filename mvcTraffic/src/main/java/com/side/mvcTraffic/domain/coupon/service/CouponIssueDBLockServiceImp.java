@@ -2,6 +2,7 @@ package com.side.mvcTraffic.domain.coupon.service;
 
 import com.side.mvcTraffic.domain.coupon.entity.Coupon;
 import com.side.mvcTraffic.domain.coupon.entity.CouponIssue;
+import com.side.mvcTraffic.domain.coupon.factory.CouponIssueService;
 import com.side.mvcTraffic.domain.coupon.repository.mysql.CouponIssueJpaRepository;
 import com.side.mvcTraffic.domain.coupon.repository.mysql.CouponIssueRepository;
 import com.side.mvcTraffic.domain.coupon.repository.mysql.CouponJpaRepository;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.side.mvcTraffic.global.exception.ErrorCode.COUPON_NOT_EXIST;
 import static com.side.mvcTraffic.global.exception.ErrorCode.DUPLICATED_COUPON_ISSUE;
 
-@Service
+@Service("couponIssueDBLockServiceImp")
 @RequiredArgsConstructor
 public class CouponIssueDBLockServiceImp implements CouponIssueService {
 
