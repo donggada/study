@@ -18,6 +18,7 @@ import static com.side.mvcTraffic.global.exception.ErrorCode.INVALID_COUPON_ISSU
 @AllArgsConstructor
 @Getter
 @Entity
+@Builder
 @Table(name = "coupons")
 public class Coupon extends BaseTimeEntity {
 
@@ -72,10 +73,10 @@ public class Coupon extends BaseTimeEntity {
 
     public void issue() {
         if (!availableIssueQuantity()) {
-            throw INVALID_COUPON_ISSUE_QUANTITY.build("발급 가능한 수량을 초과합니다. total : %s, issued: %s".formatted(totalQuantity, issuedQuantity));
+            throw INVALID_COUPON_ISSUE_QUANTITY.build(totalQuantity, issuedQuantity);
         }
         if (!availableIssueDate()) {
-            throw INVALID_COUPON_ISSUE_DATE.build("발급 가능한 일자가 아닙니다. request : %s, issueStart: %s, issueEnd: %s".formatted(LocalDateTime.now(), dateIssueStart, dateIssueEnd));
+            throw INVALID_COUPON_ISSUE_DATE.build(dateIssueStart, dateIssueEnd);
         }
         issuedQuantity++;
     }
